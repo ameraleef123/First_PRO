@@ -197,6 +197,9 @@ namespace First_PRO.Controllers
             {
                 return Problem("Entity set 'ModelContext.Categories'  is null.");
             }
+
+
+
             var category = await _context.Categories.FindAsync(id);
             if (category != null)
             {
