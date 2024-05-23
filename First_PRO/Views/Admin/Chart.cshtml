@@ -1,0 +1,115 @@
+﻿@{
+    Layout = "~/views/shared/_Adminlayout.cshtml";
+}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- partial -->
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="page-header">
+            <h3 class="page-title"> Chart-js </h3>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Charts</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Chart-js</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Line chart</h4>
+                        <canvas id="lineChart" style="height:250px"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Bar chart</h4>
+                        <canvas id="barChart" style="height:230px"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Area chart</h4>
+                        <canvas id="areaChart" style="height:250px"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Doughnut chart</h4>
+                        <canvas id="myChart" style="height:50"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Pie chart</h4>
+                        <canvas id="pieChart" style="height:250px"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Scatter chart</h4>
+                        <canvas id="doughnutChart" style="height:250px"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div>
+            </div>
+
+
+        </div>
+    </div>
+    </div>
+    <!-- content-wrapper ends -->
+<div>
+    <canvas id="myChart"></canvas>
+</div>
+
+
+<script>
+    // Define your data
+    const data = {
+        labels: [
+            'Red',
+            'Blue',
+            'Yellow'
+        ],
+        datasets: [{
+            label: 'My First Dataset',
+            data: [300, 50, 100],
+            backgroundColor: [
+                'rgb(255, 99, 132)',
+                'rgb(54, 162, 235)',
+                'rgb(255, 205, 86)'
+            ],
+            hoverOffset: 4
+        }]
+    };
+
+    // Define your chart configuration
+    const config = {
+        type: 'doughnut',
+        data: data,
+    };
+
+    // Get the canvas element
+    const canvas = document.getElementById('myChart');
+
+    // Create the chart
+    const myChart = new Chart(canvas, config);
+</script>

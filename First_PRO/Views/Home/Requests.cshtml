@@ -1,0 +1,96 @@
+﻿@model First_PRO.Models.Request
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_ASMPCLayout.cshtml";
+}
+
+<div class="container-xxl py-5 bg-dark hero-header mb-5">
+    <div class="container text-center my-5 pt-5 pb-4">
+        <h1 class="display-3 text-white mb-3 animated slideInDown">Bay The Recipes</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb justify-content-center text-uppercase">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Pages</a></li>
+                <li class="breadcrumb-item text-white active" aria-current="page">Requests </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <form asp-action="Requests">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="RecipeId" class="control-label"></label>
+                    <select asp-for="RecipeId" class="form-control" asp-items="ViewBag.RecipeId"></select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Stuats" class="control-label"></label>
+                    <input asp-for="Stuats" class="form-control" />
+                    <span asp-validation-for="Stuats" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="hidden" id="selected-card" name="ByCard" value="" />
+                    <div class="select-img-container">
+                        <img id="visa-image" src="~/Images/Visa2.png" alt="Visa" class="card-img" data-value="visa">
+                        <img id="mastercard-image" src="~/Images/mastercard.png" alt="MasterCard" class="card-img" data-value="mastercard">
+                    </div>
+                    <span asp-validation-for="ByCard" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input id="submit-btn" type="submit" value="Create" class="btn btn-success mt-2" />
+                    <button asp-action="User" class="btn btn-danger mt-2">Cancel</button>
+                </div>
+            </form>
+        </div>
+ @*       <div class="col">
+            <form asp-action="Requests">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group col-8">
+                    <label for="Stuats" class="control-label"></label>
+                    <input asp-for="Stuats" class="form-control" />
+                    <span asp-validation-for="Stuats" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                </div>
+                <div class="form-group">
+                </div>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control m-2" placeholder="Username" aria-label="Username">
+                    <input type="text" class="form-control m-2" placeholder="Server" aria-label="Server">
+                </div>
+                <div class="form-group">
+                    <input id="submit-btn" type="submit" value="Create" class="btn btn-success mt-2" />
+                    <button asp-action="User" class="btn btn-danger mt-2">Cancel</button>
+                </div>
+            </form>
+        </div>*@
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const cardImages = document.querySelectorAll(".card-img");
+
+            cardImages.forEach(function (image) {
+                image.addEventListener("click", function () {
+                    const selectedValue = this.getAttribute("data-value");
+                    document.getElementById("selected-card").value = selectedValue;
+
+                    // Optionally, you can add visual feedback to the selected image
+                    cardImages.forEach(function (img) {
+                        img.classList.remove("selected");
+                    });
+                    this.classList.add("selected");
+                });
+            });
+        });
+    </script>
+}
+
+
+

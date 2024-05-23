@@ -1,0 +1,135 @@
+﻿@model IEnumerable<First_PRO.Models.Recipe>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_ChefLayout.cshtml";
+}
+
+<h1>Create Recipes</h1>
+
+<p>
+    <a class="badge badge-outline-success" asp-action="ChefCreate">Create New</a>
+</p>
+
+<div class="row ">
+    <div class="col-12 grid-margin">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Order Status</h4>
+                <div class="table-responsive">
+                    <!-- Add the search input field -->
+                    <div class="input-group mb-3">
+                        <input type="text" id="searchInput" class="form-control border border-primary text-white" placeholder="Search Recipes By Name" aria-label="Search Recipes" aria-describedby="searchButton">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary border border-primary" type="button" id="searchButton">Search</button>
+                        </div>
+                    </div>
+
+                    <!-- Your table content here -->
+                    <table id="recipeTable" class="table">
+                        <thead>
+                            <tr>
+                                <th>@Html.DisplayNameFor(model => model.Name)</th>
+                                <th>@Html.DisplayNameFor(model => model.Price)</th>
+                                <th>@Html.DisplayNameFor(model => model.Description)</th>
+                                <th>@Html.DisplayNameFor(model => model.Date)</th>
+                                <th>@Html.DisplayNameFor(model => model.Stuats)</th>
+                                <th>@Html.DisplayNameFor(model => model.ImagePath)</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Date)</td>
+                                    <td>
+                                        @{
+                                            string statusText = "";
+                                            string statusClass = "";
+                                            switch (item.Stuats)
+                                            {
+                                                case 1:
+                                                    statusText = "Approved";
+                                                    statusClass = "badge badge-outline-success";
+                                                    break;
+                                                case 2:
+                                                    statusText = "Rejected";
+                                                    statusClass = "badge badge-outline-danger";
+                                                    break;
+                                                case 3:
+                                                    statusText = "Pending";
+                                                    statusClass = "badge badge-outline-warning";
+                                                    break;
+                                                default:
+                                                    statusText = "Unknown";
+                                                    statusClass = "badge badge-outline-secondary";
+                                                    break;
+                                            }
+                                        }
+                                        <span class="@statusClass">@statusText</span>
+                                    </td>
+
+                                    <td><img src="@Url.Content("~/Images/" + item.ImagePath)" asp-append-version="true" style="border-radius:20%;" width="300" height="300" /></td>
+                                    <td>
+                                        <a class="badge badge-outline-primary" asp-action="ChefEdit" asp-route-id="@item.Id">Edit</a> |
+                                        <a class="badge badge-outline-primary" asp-action="ChefDetails" asp-route-id="@item.Id">Details</a> |
+                                        <a class="badge badge-outline-primary" asp-action="ChefDelete" asp-route-id="@item.Id">Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Function to perform search
+            function performSearch() {
+                var input, filter, ul, li, a, i, txtValue;
+                input = document.getElementById("searchInput");
+                filter = input.value.toUpperCase();
+                ul = document.getElementById("recipeTable");
+                li = ul.getElementsByTagName("tr");
+                for (i = 0; i < li.length; i++) {
+                    a = li[i].getElementsByTagName("td")[0]; // Assuming the search is based on the first column
+                    if (a) {
+                        txtValue = a.textContent || a.innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            li[i].style.display = "";
+                        } else {
+                            li[i].style.display = "none";
+                        }
+                    }
+                }
+            }
+
+            // Trigger search on button click
+            $('#searchButton').on('click', function () {
+                performSearch();
+            });
+
+            // Trigger search on input field change
+            $('#searchInput').on('input', function () {
+                performSearch();
+            });
+        });
+    </script>
+}
+
+
+
+
+
+
+
+

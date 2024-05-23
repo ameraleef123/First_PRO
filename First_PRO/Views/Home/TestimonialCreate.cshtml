@@ -1,0 +1,75 @@
+﻿@model First_PRO.Models.Testimonial
+
+@{
+    Layout = "~/Views/Shared/_ASMPCLayout.cshtml";
+   
+}
+
+<!-- Include necessary CSS files -->
+@section Styles {
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css" rel="stylesheet" />
+}
+
+<div class="container-xxl py-5 bg-dark hero-header mb-5">
+    <div class="container text-center my-5 pt-5 pb-4">
+        <h1 class="display-3 text-white mb-3 animated slideInDown">Testimonial</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb justify-content-center text-uppercase">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Pages</a></li>
+                <li class="breadcrumb-item text-white active" aria-current="page">Testimonial</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<h4 class="m-5">Add Testimonial</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4 m-5">
+        <form asp-action="TestimonialCreate">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group mb-3">
+                <h3 for="rate" class="control-label">Rate</h3>
+                <div id="rate"></div> <!-- Star rating display -->
+                <input type="hidden" id="Rate" asp-for="Rate" />
+                <span asp-validation-for="Rate" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <h3 asp-for="Description" class="control-label">Description</h3>
+                <textarea asp-for="Description" class="form-control border border-warning" ></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+                <a asp-action="User" class="btn btn-primary">Back to Home</a>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<!-- Include necessary JavaScript files -->
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
+    <script>
+        $(function () {
+            $("#rate").rateYo({
+                starWidth: "30px",
+                normalFill: "#cccccc",
+                ratedFill: "#f0bb01",
+                maxValue: 5,
+                numStars: 5,
+                precision: 1,
+                fullStar: true,
+                onSet: function (rating, rateYoInstance) {
+                    $("#Rate").val(rating); // Set the value of the hidden input field
+                }
+            });
+        });
+    </script>
+}

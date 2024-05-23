@@ -1,0 +1,118 @@
+﻿@model First_PRO.Models.User
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1 class="m-3"> User Details </h1>
+
+<div>
+    <div class="col-md-8 grid-margin stretch-card">
+
+        <div class="card">
+
+            <div class="card-body">
+                <dl class="row ">
+                    <dt class="col-sm-4 mt-3 ">
+
+            @Html.DisplayNameFor(model => model.Username)
+                        <i class="mdi mdi-mdi mdi-account text-light"></i>
+        </dt>
+        <dd class="col-sm-8 mt-3">
+            @Html.DisplayFor(model => model.Username)
+        </dd>
+        <dt class="col-sm-4 mt-3">
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+                        <i class="mdi mdi-mdi mdi-phone text-light"></i>
+        </dt>
+        <dd class="col-sm-8 mt-3">
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+        <dt class="col-sm-4 mt-3">
+            @Html.DisplayNameFor(model => model.Password)
+                        <i class="mdi mdi-mdi mdi-lock text-light"></i>
+        </dt>
+        <dd class="col-sm-8 mt-3">
+            @Html.DisplayFor(model => model.Password)
+        </dd>
+        <dt class="col-sm-4 mt-3">
+            @Html.DisplayNameFor(model => model.Email)
+                        <i class="mdi mdi-mdi mdi-email text-light"></i>
+        </dt>
+        <dd class="col-sm-8 mt-3">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class="col-sm-4 mt-3">
+            @Html.DisplayNameFor(model => model.Gender)
+                        <i class="mdi mdi-mdi mdi-gender-transgender text-light"></i>
+        </dt>
+                    <dd class="col-sm-8 mt-3">
+                        @{
+                            string gender = "";
+                            switch (Model.Gender)
+                            {
+                                case 1:
+                                    gender = "Male";
+                                    break;
+                                case 2:
+                                    gender = "Female";
+                                    break;
+                                case 3:
+                                    gender = "Other";
+                                    break;
+                                default:
+                                    gender = "Unknown";
+                                    break;
+                            }
+                        }
+                        @gender
+                    </dd>
+        <dt class="col-sm-4 mt-3">
+            @Html.DisplayNameFor(model => model.Address)
+                        <i class="mdi mdi-mdi mdi-map-marker text-light"></i>
+
+        </dt>
+        <dd class="col-sm-8 mt-3">
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+                    <dt class="col-sm-4 mt-3 mt-3">
+            @Html.DisplayNameFor(model => model.Date)
+                        <i class="mdi mdi-mdi mdi-calendar text-light"></i>
+        </dt>
+                    <dd class="col-sm-8 mt-3 mt-3">
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+      
+        <dt class="col-sm-4 mt-3 mt-3">
+            @Html.DisplayNameFor(model => model.Role)
+        </dt>
+                    <dd class="col-sm-8 mt-3">
+                        @{
+                            string role = "";
+                            switch (Model.Role.Id)
+                            {
+                                case 2:
+                                    role = "Chef";
+                                    break;
+                                case 3:
+                                    role = "Customer";
+                                    break;
+                                default:
+                                    role = "Unknown";
+                                    break;
+                            }
+                        }
+                        @role
+                    </dd>
+    </dl>
+                <div>
+                    <a class="btn btn-outline-primary" asp-action="GetUser"><i class="mdi mdi-keyboard-backspace">Back to List</i></a>
+                </div>
+</div>
+
+</div>
+    </div>
+</div>
+
+                   

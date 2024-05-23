@@ -1,0 +1,228 @@
+﻿@model First_PRO.Models.User
+@{
+    Layout = "~/views/shared/_Userlayout.cshtml";
+    ViewData["Title"] = "Home Page";
+    ViewData["UserImage"] = Model.ImagePath;
+    ViewData["Username"] = Model.Username;
+}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+@section Styles {
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css" rel="stylesheet" />
+}
+
+<!-- Include necessary JavaScript files -->
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
+}
+<!-- About Start -->
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-6">
+                <div class="row g-3">
+                    <div class="col-6 text-start">
+                        <img class="img-fluid rounded w-100 wow zoomIn" data-wow-delay="0.1s" src="~/Home/img/about-5.jpg">
+                    </div>
+                    <div class="col-6 text-start">
+                        <img class="img-fluid rounded w-75 wow zoomIn" data-wow-delay="0.3s" src="~/Home/img/about-6.jpg" style="margin-top: 25%;">
+                    </div>
+                    <div class="col-6 text-end">
+                        <img class="img-fluid rounded w-75 wow zoomIn" data-wow-delay="0.5s" src="~/Home/img/about-3.jpg">
+                    </div>
+                    <div class="col-6 text-end">
+                        <img class="img-fluid rounded w-100 wow zoomIn" data-wow-delay="0.7s" src="~/Home/img/about-4.jpg">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <h5 class="section-title ff-secondary text-start text-primary fw-normal">About Us</h5>
+                <h1 class="mb-4">Welcome to <i class="fa fa-utensils text-primary me-2"></i>Recipe Blog</h1>
+                <p class="mb-4">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et eos erat ipsum et lorem et sit, sed stet lorem sit.</p>
+                <p class="mb-4">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo magna dolore erat amet</p>
+                <div class="row g-4 mb-4">
+                    <div class="col-sm-6">
+                        <div class="d-flex align-items-center border-start border-5 border-primary px-3">
+                            <h1 class="flex-shrink-0 display-5 text-primary mb-0" data-toggle="counter-up">@ViewBag.CustomerCount</h1>
+                            <div class="ps-4">
+                                <p class="mb-0">Number of</p>
+                                <h6 class="text-uppercase mb-0">Customers</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="d-flex align-items-center border-start border-5 border-primary px-3">
+                            <h1 class="flex-shrink-0 display-5 text-primary mb-0" data-toggle="counter-up">@ViewBag.ChefCount</h1>
+                            <div class="ps-4">
+                                <p class="mb-0">Number of</p>
+                                <h6 class="text-uppercase mb-0"> Chefs</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a class="btn btn-primary py-3 px-5 mt-2" href="">Read More</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- About End -->
+
+
+<!-- Menu Start -->
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h5 class="section-title ff-secondary text-center text-primary fw-normal">Categories & Recipes Menu</h5>
+            <h1 class="mb-5">Most Popular Items</h1>
+        </div>
+        <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.1s">
+            <ul class="nav nav-pills d-inline-flex justify-content-center border-bottom mb-5">
+                @foreach (var category in ViewBag.Categories)
+                {
+                    <li class="nav-item">
+                        <a class="d-flex align-items-center text-start mx-3 me-0 pb-3" data-bs-toggle="pill" href="#tab-@category.Id">
+                            <i class="fa fa-utensils fa-2x text-primary"></i>
+                            <div class="ps-3">
+                                <small class="text-body">Category</small>
+                                <h6 class="mt-n1 mb-0">@category.Name</h6>
+                            </div>
+                        </a>
+                    </li>
+                }
+            </ul>
+           @* <ul class="nav nav-pills d-inline-flex justify-content-center border-bottom mb-5">
+                @foreach (var recipe in ViewBag.Recipes)
+                {
+                    <div class="col-lg-6">
+                            <img class="flex-shrink-0 img-fluid rounded" src="@Url.Content("~/Images/" + recipe.ImagePath)" alt="Recipe Image" style="width: 120px;">
+                            <div class="w-100 d-flex flex-column text-start ps-4">
+                                <h5 class="d-flex justify-content-between border-bottom pb-2">
+                                    <span>@recipe.Name</span>
+                                    <div class="rateyo-@recipe.Id"></div>
+
+                                </h5>
+                                <h6> $@recipe.Price</h6>
+                                <h6>@recipe.Description</h6>
+
+                                <button type="button" class="btn btn-primary add-rating-btn" data-recipe-id="@recipe.Id">Add Rating</button>
+                            </div>
+                    </div>
+                }
+            </ul>*@
+
+        </div>
+            <div class="row g-4">
+                <div class="tab-content">
+                    @foreach (var category in ViewBag.Categories)
+                    {
+                        <div id="tab-@category.Id" class="tab-pane fade p-0">
+                            <div class="row g-4">
+                                @foreach (var recipe in category.Recipes)
+                                {
+                                    <div class="col-lg-6">
+                                        <div class="d-flex align-items-center category-item" data-category-id="@category.Id">
+                                            <img class="flex-shrink-0 img-fluid rounded" src="@Url.Content("~/Images/" + recipe.ImagePath)" alt="Recipe Image" style="width: 120px;">
+                                            <div class="w-100 d-flex flex-column text-start ps-4">
+                                                <h5 class="d-flex justify-content-between border-bottom pb-2">
+                                                    <span>@recipe.Name</span>
+                                                    <div class="rateyo-@recipe.Id"></div>
+                                                <button type="button" class="btn btn-primary add-rating-btn" onclick="location.href='@Url.Action("TestimonialCreate", "Home", new { recipeId = recipe.Id })'">Add Rating</button>
+
+                                                </h5>
+                                                <h6> $@recipe.Price</h6>
+                                                <h6>@recipe.Description</h6>
+
+                                            <button type="button" class="btn btn-outline-primary mt2" asp-controller="Home" asp-action="Requests" >Buy The Recipe</button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Menu End -->
+<!-- Menu End -->
+
+<script>
+    $(document).ready(function () {
+    @foreach (var category in ViewBag.Categories)
+    {
+        @foreach (var recipe in category.Recipes)
+        {
+            <text>
+                    $(".rateyo-@recipe.Id").rateYo({
+                        rating: @recipe.AverageRating,
+                        readOnly: true,
+                        starWidth: "20px",
+                        normalFill: "#cccccc",
+                        ratedFill: "#f0bb01",
+                        maxValue: 5,
+                        numStars: 5,
+                        precision: 1,
+                        fullStar: true
+                    });
+            </text>
+        }
+    }
+        });
+</script>
+
+<!-- Team Start -->
+<div class="container-xxl pt-5 pb-3">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h5 class="section-title ff-secondary text-center text-primary fw-normal">Team Members</h5>
+            <h1 class="mb-5">Our Master Chefs</h1>
+        </div>
+        <div class="row g-4">
+            @foreach (var chef in ViewBag.Chefs)
+            {
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="team-item text-center rounded overflow-hidden">
+                        <div class="rounded-circle overflow-hidden m-4">
+                            <img class="img-fluid" src="@chef.ImagePath" alt="Chef Image">
+                        </div>
+                        <h5 class="mb-0">@chef.Username</h5>
+                        <small>Chef</small>
+                        <div class="d-flex justify-content-center mt-3">
+                            <a href="@Url.Action("Recipes", "Home", new { chefId = chef.Id })" class="btn btn-primary me-2 py-2 px-4">View Recipes</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!-- Team End -->
+<!-- Testimonial Start -->
+<div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
+    <div class="container">
+        <div class="text-center">
+            <h5 class="section-title ff-secondary text-center text-primary fw-normal">Testimonial</h5>
+            <h1 class="mb-5">Our Clients Say!!!</h1>
+        </div>
+        <div class="owl-carousel testimonial-carousel">
+            @foreach (var testimonial in ViewBag.Testimonials)
+            {
+                <div class="testimonial-item bg-transparent border rounded p-4">
+                    <i class="fa fa-quote-left fa-2x text-primary mb-3"></i>
+                    <p>@testimonial.Description</p>
+                    <div class="d-flex align-items-center">
+                        <img class="img-fluid flex-shrink-0 rounded-circle" src="~/Home/img/testimonial-1.jpg" style="width: 50px; height: 50px;">
+                        <div class="ps-3">
+                            <h5 class="mb-1">@testimonial.User.Username</h5>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <a asp-controller="Home" asp-action="TestimonialCreate" class="btn btn-primary me-2 py-2 px-4">Add Testimonial</a>
+    </div>
+</div>

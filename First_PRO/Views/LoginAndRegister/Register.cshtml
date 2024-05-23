@@ -1,0 +1,79 @@
+﻿@model User
+
+@{
+    Layout = "~/views/shared/_LoginAndRegisterLayout.cshtml";
+}
+
+<!-- Sign up form -->
+<section class="signup">
+    <div class="container">
+        <div class="signup-content">
+            <div class="signup-form">
+                <h2 class="form-title">Sign up</h2>
+                <form asp-action="Register" method="POST" class="register-form" id="register-form">
+
+                    <div class="form-group">
+                        <label for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                        <input asp-for="Username" type="text" placeholder="Your Name" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Email"><i class="zmdi zmdi-email"></i></label>
+                        <input asp-for="Email" type="email" placeholder="Your Email" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Phone-Number"><i class="zmdi zmdi-phone"></i></label>
+                        <input asp-for="PhoneNumber" type="number" placeholder="Your Phone-Number" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Phone-Number">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </label>
+                        <input asp-for="Address" type="text" placeholder="Your Address" />
+                    </div>
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="inputGroupSelect01">Options</label>
+                        <select asp-for="Role.Id" class="form-select border border-warning" id="inputGroupSelect01">
+                            <option value="" disabled selected><i class="zmdi zmdi-phone"></i> Choose role</i></option>
+                            <option value="2" class="bg-hover-warning">Chef</option>
+                            <option value="3" class="bg-hover-warning">Customer</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="inputGroupSelect01">Options</label>
+                        <select asp-for="Gender" class="form-select border border-warning" id="inputGroupSelect01">
+                            <option value="" disabled selected>Gender</option>
+                            <option value="1">Male</option>
+                            <option value="2">Female</option>
+                            <option value="3">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="pass"><i class="zmdi zmdi-lock"></i></label>
+                        <input asp-for="Password" type="password" placeholder="Password" />
+                    </div>
+                    <div class="form-group">
+                        <label for="re-pass"><i class="zmdi zmdi-lock-outline"></i></label>
+                        <input type="password" name="re_pass" id="re_pass" placeholder="Repeat your password" />
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" />
+                        <label for="agree-term" class="label-agree-term"><span><span></span></span>I agree all statements in  <a href="#" class="term-service">Terms of service</a></label>
+                    </div>
+                    <div class="form-group form-button">
+                        <input type="submit" name="signup" id="signup" class="form-submit" value="Register" />
+                        <button asp-action="Login" class="form-submit border border-white">I am already a member</button>
+                    </div>
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                </form>
+
+            </div>
+                <div class="signup-image">
+                    <figure><img src="~/LoginAndRegister/images/pixelcut-export.jpeg" alt="sing up image"></figure>
+                    <a asp-action="Login" class="signup-image-link">I am already member</a>
+                </div>
+            </div>
+        </div>
+</section>
