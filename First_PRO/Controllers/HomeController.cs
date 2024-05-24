@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
+using Newtonsoft.Json.Linq;
+
 using System.Diagnostics;
 
 
@@ -191,11 +193,15 @@ namespace First_PRO.Controllers
 
 
 
-        public IActionResult TestimonialCreate()
+        public IActionResult TestimonialCreate(decimal? recipeId)
         {
             ViewData["RecipeId"] = new SelectList(_context.Recipes, "Id", "Id");
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
-            return View();
+            ViewData["recipeIdValue"] = recipeId;
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            var rate = _context.Testimonials.FirstOrDefault(x=>x.RecipeId == recipeId && x.UserId == userId);
+            return View(rate);
         }
 
         // POST: Testimonials/Create
@@ -203,14 +209,10 @@ namespace First_PRO.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> TestimonialCreate([Bind("Id,Rate,Description")] Testimonial testimonial)
+        public async Task<IActionResult> TestimonialCreate([Bind("Id,Rate,Description,RecipeId")] Testimonial testimonial)
         {
             var userId = HttpContext.Session.GetInt32("UserId");
 
-
-
-            if (ModelState.IsValid)
-            {
                 try
                 {
                     var existingTestimonial = await _context.Testimonials.FindAsync(testimonial.Id);
@@ -237,11 +239,6 @@ namespace First_PRO.Controllers
                     ModelState.AddModelError("", "An error occurred while adding the testimonial.");
                     return View(testimonial);
                 }
-            }
-
-            ViewData["RecipeId"] = new SelectList(_context.Recipes, "Id", "Id", testimonial.RecipeId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", testimonial.UserId);
-            return View(testimonial);
         }
         public async Task<IActionResult> Requests()
         {

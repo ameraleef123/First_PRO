@@ -141,7 +141,9 @@
                                         </div>
                                     </div>
                                     <div class="preview-item-content">
-                                        <button class="btn btn-link text-success" onclick="location.href='@Url.Action("EditProfile", "Admin")'">Edit Profile</button>
+                                        <button class="btn btn-link text-success" onclick="location.href='@Url.Action("EditProfile", "Admin", new { id = ViewData["UserNumber"] })'">
+                                            Edit Profile
+                                        </button>
                                     </div>
                                 </a>
                                 <div class="dropdown-divider"></div>

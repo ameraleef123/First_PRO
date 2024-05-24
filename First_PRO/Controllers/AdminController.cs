@@ -34,7 +34,7 @@ namespace First_PRO.Controllers
             ViewBag.TotalRecipesCount = totalRecipesCount;
             ViewBag.UserName = userName;
             ViewBag.Role = role;
-
+            ViewBag.userIdValue = HttpContext.Session.GetInt32("UserId");
             return View();
         }
 

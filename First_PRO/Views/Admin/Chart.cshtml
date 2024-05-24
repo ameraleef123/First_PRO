@@ -20,7 +20,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Line chart</h4>
-                        <canvas id="lineChart" style="height:250px"></canvas>
+                        <canvas id="barChart1" style="height:250px"></canvas>
                     </div>
                 </div>
             </div>
@@ -28,7 +28,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Bar chart</h4>
-                        <canvas id="barChart" style="height:230px"></canvas>
+                        <canvas id="myChart4" style="height:230px"></canvas>
                     </div>
                 </div>
             </div>
@@ -38,7 +38,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Area chart</h4>
-                        <canvas id="areaChart" style="height:250px"></canvas>
+                        <canvas id="doughnutChart1" style="height:250px"></canvas>
                     </div>
                 </div>
             </div>
@@ -46,70 +46,162 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Doughnut chart</h4>
-                        <canvas id="myChart" style="height:50"></canvas>
+                        <canvas id="myChart3"></canvas>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-6 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Pie chart</h4>
-                        <canvas id="pieChart" style="height:250px"></canvas>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Scatter chart</h4>
-                        <canvas id="doughnutChart" style="height:250px"></canvas>
-                    </div>
-                </div>
-            </div>
-            <div>
-            </div>
-
-
-        </div>
     </div>
-    </div>
-    <!-- content-wrapper ends -->
+</div>
+<!-- content-wrapper ends -->
 <div>
     <canvas id="myChart"></canvas>
 </div>
 
 
 <script>
-    // Define your data
-    const data = {
-        labels: [
-            'Red',
-            'Blue',
-            'Yellow'
-        ],
+    // Define the Utils object
+    const Utils = {
+        // Define the months function
+        months: function (options) {
+            const count = options.count || 12; // Default to 12 months
+            const labels = [];
+            for (let i = 0; i < count; i++) {
+                labels.push('Month ' + (i + 1));
+            }
+            return labels;
+        }
+    };
+
+    // First chart configuration--------------------------------------------------------------
+    const doughnutData = {
+        labels: ['Pink', 'Blue', 'Yellow'],
+        datasets: [{
+            data: [30, 50, 10],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.5)',
+                'rgba(54, 162, 235, 0.5)',
+                'rgba(255, 206, 86, 0.5)',
+                'rgba(75, 192, 192, 0.5)',
+                'rgba(153, 102, 255, 0.5)',
+                'rgba(255, 159, 64, 0.5)'
+            ],
+            borderColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+        }],
+    };
+
+    const doughnutConfig = {
+        type: 'doughnut',
+        data: doughnutData,
+    };
+
+    // Get the canvas element and create the first chart
+    const doughnutCanvas = document.getElementById('doughnutChart1');
+    const doughnutChart = new Chart(doughnutCanvas, doughnutConfig);
+
+    // Second chart configuration------------------------------------------------------------------------------------
+    const barLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+
+    const barData = {
+        labels: barLabels,
+        datasets: [{
+            label: 'My First Dataset',
+            data: [65, 59, 80, 81, 56, 55, 40],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 205, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(201, 203, 207, 0.2)'
+            ],
+            borderColor: [
+                'rgb(255, 99, 132)',
+                'rgb(255, 159, 64)',
+                'rgb(255, 205, 86)',
+                'rgb(75, 192, 192)',
+                'rgb(54, 162, 235)',
+                'rgb(153, 102, 255)',
+                'rgb(201, 203, 207)'
+            ],
+            borderWidth: 1
+        }]
+    };
+
+    const barConfig = {
+        type: 'bar',
+        data: barData,
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    };
+
+    // Get the canvas element and create the second chart
+    const barCanvas = document.getElementById('barChart1');
+    const barChart = new Chart(barCanvas, barConfig);
+
+    // Third chart configuration-------------------------------------------------------------------------
+    const pieData = {
+        labels: ['Red', 'Blue', 'Yellow'],
         datasets: [{
             label: 'My First Dataset',
             data: [300, 50, 100],
-            backgroundColor: [
-                'rgb(255, 99, 132)',
-                'rgb(54, 162, 235)',
-                'rgb(255, 205, 86)'
-            ],
+            backgroundColor: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(255, 205, 86)'],
             hoverOffset: 4
         }]
     };
 
     // Define your chart configuration
-    const config = {
-        type: 'doughnut',
-        data: data,
+    const pieConfig = {
+        type: 'pie',
+        data: pieData,
     };
 
     // Get the canvas element
-    const canvas = document.getElementById('myChart');
+    const pieCanvas = document.getElementById('myChart3');
 
     // Create the chart
-    const myChart = new Chart(canvas, config);
+    const pieChart = new Chart(pieCanvas, pieConfig);
+
+    // Four chart configuration--------------------------------------------------------------
+
+    // Define the labels
+    const lineLabels = Utils.months({ count: 7 });
+
+    // Define the line data
+    const lineData = {
+        labels: lineLabels,
+        datasets: [{
+            label: 'My First Dataset',
+            data: [65, 59, 80, 81, 56, 55, 40],
+            fill: false,
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0.1
+        }]
+    };
+
+    // Define the line chart configuration
+    const lineConfig = {
+        type: 'line',
+        data: lineData,
+    };
+
+    // Get the canvas element
+    const lineCanvas = document.getElementById('myChart4');
+
+    // Create the chart
+    const lineChart = new Chart(lineCanvas, lineConfig);
+
 </script>

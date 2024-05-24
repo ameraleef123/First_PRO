@@ -29,6 +29,8 @@
     <div class="col-md-4 m-5">
         <form asp-action="TestimonialCreate">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="RecipeId" value="@ViewData["recipeIdValue"]" />
+            <input type="hidden" asp-for="Id" />
 
             <div class="form-group mb-3">
                 <h3 for="rate" class="control-label">Rate</h3>
