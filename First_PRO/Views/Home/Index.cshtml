@@ -70,7 +70,7 @@
                     <div class="p-5 wow fadeInUp" data-wow-delay="0.2s">
                         <h5 class="section-title ff-secondary text-start text-primary fw-normal">Ask Qustion</h5>
                         <h1 class="text-white mb-4">Ask Us Here</h1>
-                <form asp-action="Create" method="post">
+                <form asp-action="CreateGuest" method="post">
                     <div class="row g-3">
                         <div class="col-md-6">
                             <div class="form-floating">
@@ -97,7 +97,7 @@
                             </div>
                         </div>
                         <div class="col-12">
-                            <button class="btn btn-primary w-100 py-3" type="submit">Ask Now</button>
+                            <button class="btn btn-primary w-100 py-3" value="Create" type="submit">Ask Now</button>
                         </div>
                     </div>
                 </form>
@@ -141,9 +141,7 @@
                         </div>
                         <h5 class="mb-0">@chef.Username</h5>
                         <small>Chef</small>
-                        <div class="d-flex justify-content-center mt-3">
-                            <a href="@Url.Action("Recipes", "Home", new { chefId = chef.Id })" class="btn btn-primary me-2 py-2 px-4">View Recipes</a>
-                        </div>
+                    
                     </div>
                 </div>
             }
@@ -167,7 +165,7 @@
                     <div class="d-flex align-items-center">
                         <img class="img-fluid flex-shrink-0 rounded-circle" src="~/Home/img/testimonial-1.jpg" style="width: 50px; height: 50px;">
                         <div class="ps-3">
-                            <h5 class="mb-1">@ViewBag.Testimonials</h5>
+                            <h5 class="mb-1">@testimonial.User.Username</h5>
                         </div>
                     </div>
                 </div>

@@ -22,11 +22,15 @@ namespace First_PRO.Controllers
 
         public IActionResult Index()
         {
+            var userId = HttpContext.Session.GetInt32("UserId");
+
             var userName = HttpContext.Session.GetString("Username") ?? "Guest";
             var role = HttpContext.Session.GetString("Role") ?? "Guest";
             var totalUsersCount = _context.Users.Count();
             var totalChefsCount = _context.Users.Count(u => u.RoleId == 2);
             var totalRecipesCount = _context.Recipes.Count();
+            var loginUser = _context.Users.Where(u => u.Id == (decimal)userId).FirstOrDefault();
+
 
 
             ViewBag.TotalUsersCount = totalUsersCount;
@@ -35,7 +39,7 @@ namespace First_PRO.Controllers
             ViewBag.UserName = userName;
             ViewBag.Role = role;
             ViewBag.userIdValue = HttpContext.Session.GetInt32("UserId");
-            return View();
+            return View(loginUser);
         }
 
 
@@ -462,7 +466,16 @@ namespace First_PRO.Controllers
         }
         public IActionResult Chart()
         {
-            return View();
+
+            var Categories = _context.Categories.ToList();
+            var Users = _context.Users.ToList();
+            var Recipes = _context.Recipes.ToList();
+            var Testimonials = _context.Testimonials.ToList();
+
+
+            var Result = Tuple.Create<IEnumerable<Category>, IEnumerable<User>, IEnumerable<Recipe> , IEnumerable<Testimonial>>(Categories, Users, Recipes, Testimonials);
+
+            return View(Result);
         }
         public async Task<IActionResult> EditProfile(decimal? id)
         {
@@ -517,6 +530,8 @@ namespace First_PRO.Controllers
                     userDb.Date = DateTime.Now;
                     userDb.Gender = user.Gender;
                     userDb.Address = user.Address;
+                    userDb.ImagePath = user.ImagePath;
+
                     _context.Update(userDb);
                     await _context.SaveChangesAsync();
                     _context.Update(user);
@@ -538,7 +553,17 @@ namespace First_PRO.Controllers
             return View(user);
         }
 
-
+        public async Task<IActionResult> Guests()
+        {
+            return _context.Guests != null ?
+                        View(await _context.Guests.ToListAsync()) :
+                        Problem("Entity set 'ModelContext.Guests'  is null.");
+        }
+        public async Task<IActionResult> Reports()
+        {
+            var modelContext = _context.Requests.Include(r => r.Recipe).Include(r => r.User);
+            return View(await modelContext.ToListAsync());
+        }
 
     }
 }

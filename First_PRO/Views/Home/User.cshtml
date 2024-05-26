@@ -2,8 +2,12 @@
 @{
     Layout = "~/views/shared/_Userlayout.cshtml";
     ViewData["Title"] = "Home Page";
+    ViewData["UserNumber"] = ViewBag.userIdValue;
+
     ViewData["UserImage"] = Model.ImagePath;
     ViewData["Username"] = Model.Username;
+    ViewData["UserNumber"] = ViewBag.userIdValue;
+
 }
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -91,25 +95,7 @@
                     </li>
                 }
             </ul>
-           @* <ul class="nav nav-pills d-inline-flex justify-content-center border-bottom mb-5">
-                @foreach (var recipe in ViewBag.Recipes)
-                {
-                    <div class="col-lg-6">
-                            <img class="flex-shrink-0 img-fluid rounded" src="@Url.Content("~/Images/" + recipe.ImagePath)" alt="Recipe Image" style="width: 120px;">
-                            <div class="w-100 d-flex flex-column text-start ps-4">
-                                <h5 class="d-flex justify-content-between border-bottom pb-2">
-                                    <span>@recipe.Name</span>
-                                    <div class="rateyo-@recipe.Id"></div>
-
-                                </h5>
-                                <h6> $@recipe.Price</h6>
-                                <h6>@recipe.Description</h6>
-
-                                <button type="button" class="btn btn-primary add-rating-btn" data-recipe-id="@recipe.Id">Add Rating</button>
-                            </div>
-                    </div>
-                }
-            </ul>*@
+    
 
         </div>
             <div class="row g-4">
@@ -131,9 +117,8 @@
 
                                                 </h5>
                                                 <h6> $@recipe.Price</h6>
-                                                <h6>@recipe.Description</h6>
 
-                                            <button type="button" class="btn btn-outline-primary mt2" asp-controller="Home" asp-action="Requests" >Buy The Recipe</button>
+                                            <button type="button" class="btn btn-outline-primary mt2" onclick="location.href='@Url.Action("Requests", "Home", new { recipeId = recipe.Id })'">Buy The Recipe</button>
 
                                             </div>
                                         </div>

@@ -1,4 +1,8 @@
-﻿@{
+﻿@model Tuple<IEnumerable<Category>, IEnumerable<User>, IEnumerable<Recipe>, IEnumerable<Testimonial>>
+
+
+
+@{
     Layout = "~/views/shared/_Adminlayout.cshtml";
 }
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -60,7 +64,7 @@
 
 
 <script>
-    // Define the Utils object
+
     const Utils = {
         // Define the months function
         months: function (options) {
@@ -74,10 +78,17 @@
     };
 
     // First chart configuration--------------------------------------------------------------
+
+
+    var x = @Json.Serialize(@Model.Item1.Count())
+        var y = @Json.Serialize(@Model.Item2.Count())
+                var z = @Json.Serialize(@Model.Item3.Count())
+
+
     const doughnutData = {
-        labels: ['Pink', 'Blue', 'Yellow'],
+        labels: ['Categories', 'User', 'Recipe'],
         datasets: [{
-            data: [30, 50, 10],
+            data:[x , y , z],
             backgroundColor: [
                 'rgba(255, 99, 132, 0.5)',
                 'rgba(54, 162, 235, 0.5)',
@@ -107,13 +118,16 @@
     const doughnutChart = new Chart(doughnutCanvas, doughnutConfig);
 
     // Second chart configuration------------------------------------------------------------------------------------
+    var z = @Json.Serialize(@Model.Item4.Count())
+
+
     const barLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
 
     const barData = {
         labels: barLabels,
         datasets: [{
-            label: 'My First Dataset',
-            data: [65, 59, 80, 81, 56, 55, 40],
+            label: 'Number of Testimonials',
+            data: [z],
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(255, 159, 64, 0.2)',

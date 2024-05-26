@@ -48,6 +48,8 @@ namespace First_PRO.Controllers
             var recipes = _context.Recipes.ToList();
             var loginUser = _context.Users.Where(u => u.Id == (decimal)userId).FirstOrDefault();
             var testimonials = _context.Testimonials.Include(t => t.User).ToList();
+            ViewBag.userIdValue = HttpContext.Session.GetInt32("UserId");
+
 
 
 
@@ -147,7 +149,7 @@ namespace First_PRO.Controllers
 
             return View(loginUser);
         }
-     
+
         public IActionResult Team()
         {
             var chefs = _context.Users.Where(u => u.RoleId == 2).ToList();
@@ -200,7 +202,7 @@ namespace First_PRO.Controllers
             ViewData["recipeIdValue"] = recipeId;
             var userId = HttpContext.Session.GetInt32("UserId");
 
-            var rate = _context.Testimonials.FirstOrDefault(x=>x.RecipeId == recipeId && x.UserId == userId);
+            var rate = _context.Testimonials.FirstOrDefault(x => x.RecipeId == recipeId && x.UserId == userId);
             return View(rate);
         }
 
@@ -213,37 +215,35 @@ namespace First_PRO.Controllers
         {
             var userId = HttpContext.Session.GetInt32("UserId");
 
-                try
-                {
-                    var existingTestimonial = await _context.Testimonials.FindAsync(testimonial.Id);
+            try
+            {
+                var existingTestimonial = await _context.Testimonials.FindAsync(testimonial.Id);
 
-                    if (existingTestimonial != null)
-                    {
-                        existingTestimonial.Rate = testimonial.Rate;
-                        existingTestimonial.Description = testimonial.Description;
-                        existingTestimonial.Date = DateTime.Now;
-                        _context.Update(existingTestimonial);
-                    }
-                    else
-                    {
-                        testimonial.UserId = userId.Value;
-                        testimonial.Date = DateTime.Now;
-                        _context.Add(testimonial);
-                    }
-
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(User));
-                }
-                catch (Exception ex)
+                if (existingTestimonial != null)
                 {
-                    ModelState.AddModelError("", "An error occurred while adding the testimonial.");
-                    return View(testimonial);
+                    existingTestimonial.Rate = testimonial.Rate;
+                    existingTestimonial.Description = testimonial.Description;
+                    existingTestimonial.Date = DateTime.Now;
+                    _context.Update(existingTestimonial);
                 }
+                else
+                {
+                    testimonial.UserId = userId.Value;
+                    testimonial.Date = DateTime.Now;
+                    _context.Add(testimonial);
+                }
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(User));
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "An error occurred while adding the testimonial.");
+                return View(testimonial);
+            }
         }
         public async Task<IActionResult> Requests()
         {
-            ViewData["RecipeId"] = new SelectList(_context.Recipes, "Id", "Id");
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
@@ -259,7 +259,7 @@ namespace First_PRO.Controllers
             if (ModelState.IsValid)
             {
 
-                request.Date= DateTime.Now;
+                request.Date = DateTime.Now;
                 request.UserId = userId;
                 _context.Add(request);
                 await _context.SaveChangesAsync();
@@ -270,5 +270,105 @@ namespace First_PRO.Controllers
             return View(request);
         }
 
+        public async Task<IActionResult> EditProfile(decimal? id)
+        {
+            if (id == null || _context.Users == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Id", user.RoleId);
+            return View(user);
+        }
+
+        // POST: Users/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditProfile(decimal id, [Bind("Id,Username,PhoneNumber,Password,Email,Gender,Address,ImageFile")] User user)
+        {
+            if (id != user.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                if (user.ImageFile != null)
+                {
+                    string wwwrootPath = _webHostEnvironment.WebRootPath;
+                    string imageName = Guid.NewGuid().ToString() + "_" + user.ImageFile.FileName;
+                    string fullPath = Path.Combine(wwwrootPath + "/Images/", imageName);
+                    using (var fileStream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        user.ImageFile.CopyToAsync(fileStream);
+                    }
+                    user.ImagePath = imageName;
+                }
+                try
+                {
+                    var userDb = await _context.Users.FindAsync(user.Id);
+                    userDb.Username = user.Username;
+                    userDb.PhoneNumber = user.PhoneNumber;
+                    userDb.Email = user.Email;
+                    userDb.Password = user.Password;
+                    userDb.Date = DateTime.Now;
+                    userDb.Gender = user.Gender;
+                    userDb.Address = user.Address;
+                    userDb.ImagePath = user.ImagePath;
+                    _context.Update(userDb);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UserExists(user.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(User));
+            }
+            ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Id", user.RoleId);
+            return View(user);
+
+        }
+
+        private bool UserExists(decimal id)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        // GET: Guests/Create
+        public IActionResult CreateGuest()
+        {
+            return View();
+        }
+
+        // POST: Guests/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateGuest([Bind("Id,Name,Date,PhoneNumber,Email,Question")] Guest guest)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(guest);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(guest);
+        }
     }
 }

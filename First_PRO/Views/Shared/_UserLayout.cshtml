@@ -73,7 +73,7 @@
                         <h6 class="mb-0 ms-2 text-primary m-0 ">@ViewData["Username"]</h6>
                         <div class="dropdown-menu m-0">
                             <div class="preview-item-content">
-                                <button class="btn btn-link text-success" onclick="location.href='@Url.Action("EditProfile", "Admin")'">Edit Profile</button>
+                                <button class="btn btn-link text-success" onclick="location.href='@Url.Action("EditProfile", "Home",new { id = ViewData["UserNumber"] })'">Edit Profile</button>
                             </div>
                             <div class="preview-item-content">
                                 <form method="post" id="logoutForm" asp-controller="Admin" asp-action="Logout">

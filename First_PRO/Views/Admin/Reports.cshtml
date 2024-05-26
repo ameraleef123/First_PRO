@@ -1,0 +1,31 @@
+﻿
+@{
+    Layout = "~/views/shared/_Adminlayout.cshtml";
+}
+<link href="https://cdn.datatables.net/1.11.1/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/buttons/2.0.0/css/buttons.dataTables.min.css" rel="stylesheet" />
+
+<div class="row ">
+    <div class="col-8 grid-margin">
+        <div class="card">
+            <div class="card-body">
+                <form asp-action="Search">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="startDate">Start Date</label>
+                            <input type="date" name="startDate" class="form-control form-control-sm btn btn-outline-warning" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="endDate">End Date</label>
+                            <input type="date" name="endDate" class="form-control form-control-sm btn btn-outline-warning" />
+                        </div>
+
+                    </div>
+                    <button class=" btn btn-outline-primary mt-3" type="submit">Search</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>

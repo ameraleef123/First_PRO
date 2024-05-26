@@ -1,6 +1,11 @@
-﻿@{
+﻿@model First_PRO.Models.User
+
+
+@{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     ViewData["UserNumber"] = ViewBag.userIdValue;
+ViewData["UserImage"] = Model.ImagePath;
+    ViewData["Username"] = Model.Username;
 }
 
 <!-- partial -->
