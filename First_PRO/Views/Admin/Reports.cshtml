@@ -1,6 +1,14 @@
-﻿
+﻿@model IEnumerable<First_PRO.Models.Request>
+@using Microsoft.AspNetCore.Html
+
+
 @{
     Layout = "~/views/shared/_Adminlayout.cshtml";
+    ViewData["UserNumber"] = ViewBag.userIdValue;
+
+    ViewData["UserImage"] = ViewBag.UserImagePath;
+    ViewData["Username"] = ViewBag.Username;
+
 }
 <link href="https://cdn.datatables.net/1.11.1/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="https://cdn.datatables.net/buttons/2.0.0/css/buttons.dataTables.min.css" rel="stylesheet" />
@@ -9,7 +17,7 @@
     <div class="col-8 grid-margin">
         <div class="card">
             <div class="card-body">
-                <form asp-action="Search">
+                <form asp-action="Reports">
                     <div class="row">
                         <div class="col-md-6">
                             <label for="startDate">Start Date</label>
@@ -27,5 +35,80 @@
             </div>
         </div>
     </div>
+</div>
+<div class="row ">
+    <div class="col-12 grid-margin">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="example" class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ByCard)
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.Recipe.Name</td>
+                                    <td>@item.Recipe.Price</td>
+                                    <td>@item.Date</td>
+                                    <td>
+                                        @{
+                                            IHtmlContent descriptionContent = Html.DisplayFor(modelItem => item.Recipe.Description);
+                                            var writer = new System.IO.StringWriter();
+                                            descriptionContent.WriteTo(writer, System.Text.Encodings.Web.HtmlEncoder.Default);
+                                            string description = writer.ToString();
 
+                                            string[] words = System.Text.RegularExpressions.Regex.Split(description, @"\W+");
+                                            int wordsPerLine = 5;
+                                            int totalLines = (int)Math.Ceiling((double)words.Length / wordsPerLine);
+                                            string formattedDescription = "";
+
+                                            for (int i = 0; i < totalLines; i++)
+                                            {
+                                                int startIndex = i * wordsPerLine;
+                                                int endIndex = Math.Min(startIndex + wordsPerLine, words.Length);
+                                                string line = string.Join(" ", words, startIndex, endIndex - startIndex);
+                                                formattedDescription += line + "<br />";
+                                            }
+                                        }
+                                        @Html.Raw(formattedDescription)
+                                    </td>
+                                    <td>
+                                        @if (item.ByCard == 1)
+                                        {
+                                            <img src="~/Images/Visa2.png" alt="Visa" style="height: 30px; width: 30px;" />
+                                        }
+                                        else if (item.ByCard == 2)
+                                        {
+                                            <img src="~/Images/mastercard.png" alt="Mastercard" style="height: 30px; width: 30px;" />
+                                        }
+                                        else
+                                        {
+                                            <span>No Image</span>
+                                        }
+                                    </td>
+
+
+                                    
+                                </tr>
+                            }
+
+                      
+                        </tbody>
+
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

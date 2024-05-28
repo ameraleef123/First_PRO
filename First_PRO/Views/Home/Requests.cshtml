@@ -8,13 +8,7 @@
 <div class="container-xxl py-5 bg-dark hero-header mb-5">
     <div class="container text-center my-5 pt-5 pb-4">
         <h1 class="display-3 text-white mb-3 animated slideInDown">Bay The Recipes</h1>
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb justify-content-center text-uppercase">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Pages</a></li>
-                <li class="breadcrumb-item text-white active" aria-current="page">Requests </li>
-            </ol>
-        </nav>
+       
     </div>
 </div>
 
@@ -23,12 +17,14 @@
         <div class="col">
             <form asp-action="Requests">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="RecipeId" value="@ViewData["recipeIdValue"]" />
 
                 <div class="form-group">
-                    <input type="hidden" id="selected-card" name="ByCard" value="" />
+                    <input type="hidden" id="selected-card" asp-for="ByCard" value="" />
+
                     <div class="select-img-container">
-                        <img id="visa-image" src="~/Images/Visa2.png" alt="Visa" class="card-img" data-value="visa">
-                        <img id="mastercard-image" src="~/Images/mastercard.png" alt="MasterCard" class="card-img" data-value="mastercard">
+                        <img id="visa-image" src="~/Images/Visa2.png" alt="Visa" class="card-img" data-value=1>
+                        <img id="mastercard-image" src="~/Images/mastercard.png" alt="MasterCard" class="card-img" data-value=2>
                     </div>
                     <span asp-validation-for="ByCard" class="text-danger"></span>
                 </div>
@@ -59,11 +55,13 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const cardImages = document.querySelectorAll(".card-img");
+            const selectedCardField = document.getElementById("selected-card");
 
             cardImages.forEach(function (image) {
                 image.addEventListener("click", function () {
                     const selectedValue = this.getAttribute("data-value");
                     document.getElementById("selected-card").value = selectedValue;
+                    selectedCardField.value = selectedValue;
 
                     // Optionally, you can add visual feedback to the selected image
                     cardImages.forEach(function (img) {

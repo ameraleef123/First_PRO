@@ -39,6 +39,8 @@ namespace First_PRO.Controllers
             ViewBag.UserName = userName;
             ViewBag.Role = role;
             ViewBag.userIdValue = HttpContext.Session.GetInt32("UserId");
+            ViewBag.UserImagePath = loginUser.ImagePath;
+
             return View(loginUser);
         }
 
@@ -51,12 +53,33 @@ namespace First_PRO.Controllers
 
         public async Task<IActionResult> Categories()
         {
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+            var loginUser = _context.Users.Where(u => u.Id == (decimal)userId).FirstOrDefault();
+            ViewBag.userIdValue = HttpContext.Session.GetInt32("UserId");
+
+            ViewBag.UserImagePath = user?.ImagePath ?? "~/images/download.png";
+            ViewBag.Username = user?.Username;
+
+
+
             return _context.Categories != null ?
                         View(await _context.Categories.ToListAsync()) :
                         Problem("Entity set 'ModelContext.Categories'  is null.");
         }
         public async Task<IActionResult> DetailsCat(decimal? id)
         {
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+            var loginUser = _context.Users.Where(u => u.Id == (decimal)userId).FirstOrDefault();
+            ViewBag.userIdValue = HttpContext.Session.GetInt32("UserId");
+
+            ViewBag.UserImagePath = user?.ImagePath ?? "~/images/download.png";
+            ViewBag.Username = user?.Username;
+
+
             if (id == null || _context.Categories == null)
             {
                 return NotFound();
@@ -73,6 +96,17 @@ namespace First_PRO.Controllers
         }
         public IActionResult CreateCat()
         {
+
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+            var loginUser = _context.Users.Where(u => u.Id == (decimal)userId).FirstOrDefault();
+            ViewBag.userIdValue = HttpContext.Session.GetInt32("UserId");
+
+            ViewBag.UserImagePath = user?.ImagePath ?? "~/images/download.png";
+            ViewBag.Username = user?.Username;
+
+
             return View();
         }
 
@@ -85,8 +119,15 @@ namespace First_PRO.Controllers
         {
             if (ModelState.IsValid)
             {
+                var catIMG = await _context.Categories.FirstOrDefaultAsync(x => x.Id == category.Id);
+
+                if (catIMG != null)
+                {
+                    category.ImagePath = catIMG.ImagePath;
+                }
                 if (category.ImageFile != null)
                 {
+                   
                     string wwwrootPath = _webHostEnvironment.WebRootPath;
                     string imageName = Guid.NewGuid().ToString() + "_" + category.ImageFile.FileName;
                     string fullPath = Path.Combine(wwwrootPath + "/Images/", imageName);
@@ -95,7 +136,10 @@ namespace First_PRO.Controllers
                         category.ImageFile.CopyToAsync(fileStream);
                     }
                     category.ImagePath = imageName;
+
                 }
+                _context.Entry(catIMG).State = EntityState.Detached;
+
                 _context.Add(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Categories));
@@ -105,6 +149,16 @@ namespace First_PRO.Controllers
         // GET: Categories/Edit/5
         public async Task<IActionResult> EditCat(decimal? id)
         {
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+            var loginUser = _context.Users.Where(u => u.Id == (decimal)userId).FirstOrDefault();
+            ViewBag.userIdValue = HttpContext.Session.GetInt32("UserId");
+
+            ViewBag.UserImagePath = user?.ImagePath ?? "~/images/download.png";
+            ViewBag.Username = user?.Username;
+
+
             if (id == null || _context.Categories == null)
             {
                 return NotFound();
@@ -177,6 +231,15 @@ namespace First_PRO.Controllers
         // GET: Categories/Delete/5
         public async Task<IActionResult> DeleteCat(decimal? id)
         {
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+            var loginUser = _context.Users.Where(u => u.Id == (decimal)userId).FirstOrDefault();
+            ViewBag.userIdValue = HttpContext.Session.GetInt32("UserId");
+
+            ViewBag.UserImagePath = user?.ImagePath ?? "~/images/download.png";
+          
+            ViewBag.Username = user?.Username;
             if (id == null || _context.Categories == null)
             {
                 return NotFound();
@@ -220,12 +283,38 @@ namespace First_PRO.Controllers
         }
         public async Task<IActionResult> GetUser()
         {
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            var loginUser = _context.Users.Where(u => u.Id == (decimal)userId).FirstOrDefault();
+            ViewBag.userIdValue = HttpContext.Session.GetInt32("UserId");
+
+            var userImgAndUn = _context.Users.FirstOrDefault(u => u.Id == userId);
+
+
+
+            ViewBag.UserImagePath = userImgAndUn?.ImagePath ?? "~/images/download.png";
+            ViewBag.Username = userImgAndUn?.Username;
+
+
             var modelContext = _context.Users.Include(u => u.Role).Where(u => u.RoleId == 2 || u.RoleId == 3);
             return View(await modelContext.ToListAsync());
         }
         // GET: Users/Details/5
         public async Task<IActionResult> UserDetails(decimal? id)
         {
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            var loginUser = _context.Users.Where(u => u.Id == (decimal)userId).FirstOrDefault();
+            ViewBag.userIdValue = HttpContext.Session.GetInt32("UserId");
+
+            var userImgAndUn = _context.Users.FirstOrDefault(u => u.Id == userId);
+
+
+
+            ViewBag.UserImagePath = userImgAndUn?.ImagePath ?? "~/images/download.png";
+            ViewBag.Username = userImgAndUn?.Username;
+
+
             if (id == null || _context.Users == null)
             {
                 return NotFound();
@@ -244,6 +333,17 @@ namespace First_PRO.Controllers
         // GET: Users/Edit/5
         public async Task<IActionResult> UserEdit(decimal? id)
         {
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            var loginUser = _context.Users.Where(u => u.Id == (decimal)userId).FirstOrDefault();
+            ViewBag.userIdValue = HttpContext.Session.GetInt32("UserId");
+
+            var userImgAndUn = _context.Users.FirstOrDefault(u => u.Id == userId);
+
+
+
+            ViewBag.UserImagePath = userImgAndUn?.ImagePath ?? "~/images/download.png";
+            ViewBag.Username = userImgAndUn?.Username;
             if (id == null || _context.Users == null)
             {
                 return NotFound();
@@ -303,6 +403,18 @@ namespace First_PRO.Controllers
         // GET: Users/Delete/5
         public async Task<IActionResult> UserDelete(decimal? id)
         {
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            var loginUser = _context.Users.Where(u => u.Id == (decimal)userId).FirstOrDefault();
+            ViewBag.userIdValue = HttpContext.Session.GetInt32("UserId");
+
+
+            var userImgAndUn = _context.Users.FirstOrDefault(u => u.Id == userId);
+
+
+
+            ViewBag.UserImagePath = userImgAndUn?.ImagePath ?? "~/images/download.png";
+            ViewBag.Username = userImgAndUn?.Username;
             if (id == null || _context.Users == null)
             {
                 return NotFound();
@@ -344,6 +456,20 @@ namespace First_PRO.Controllers
         }
         public async Task<IActionResult> Recipes()
         {
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            var loginUser = _context.Users.Where(u => u.Id == (decimal)userId).FirstOrDefault();
+
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+
+
+
+            ViewBag.UserImagePath = user?.ImagePath ?? "~/images/download.png";
+            ViewBag.Username = user?.Username;
+            ViewBag.userIdValue = HttpContext.Session.GetInt32("UserId");
+
+
+
             IQueryable<Recipe> recipes = _context.Recipes.Include(r => r.Cat).Include(r => r.User);
 
 
@@ -353,6 +479,19 @@ namespace First_PRO.Controllers
         // GET: Recipes/Edit/5
         public async Task<IActionResult> EditRecipe(decimal? id)
         {
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            var loginUser = _context.Users.Where(u => u.Id == (decimal)userId).FirstOrDefault();
+            ViewBag.userIdValue = HttpContext.Session.GetInt32("UserId");
+
+
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+
+        
+
+            ViewBag.UserImagePath = user?.ImagePath ?? "~/images/download.png";
+            ViewBag.Username = user?.Username;
+
             if (id == null || _context.Recipes == null)
             {
                 return NotFound();
@@ -430,6 +569,16 @@ namespace First_PRO.Controllers
         }
         public IActionResult Search()
         {
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+
+            var loginUser = _context.Users.Where(u => u.Id == (decimal)userId).FirstOrDefault();
+            ViewBag.userIdValue = HttpContext.Session.GetInt32("UserId");
+
+            ViewBag.UserImagePath = user?.ImagePath ?? "~/images/download.png";
+            ViewBag.Username = user?.Username;
+
             var result = _context.Recipes.Include(x => x.User).ToList();
             ViewBag.TotalPrice = result.Sum(x => x.Price);
             return View(result);
@@ -438,6 +587,13 @@ namespace First_PRO.Controllers
         [HttpPost]
         public IActionResult Search(DateTime? startDate, DateTime? endDate)
         {
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+
+            ViewBag.UserImagePath = user?.ImagePath ?? "~/images/download.png";
+            ViewBag.Username = user?.Username;
+
             var result = _context.Recipes.Include(x => x.User).ToList();
 
             if (startDate == null && endDate == null)
@@ -466,6 +622,18 @@ namespace First_PRO.Controllers
         }
         public IActionResult Chart()
         {
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+
+            var loginUser = _context.Users.Where(u => u.Id == (decimal)userId).FirstOrDefault();
+
+
+
+            ViewBag.userIdValue = HttpContext.Session.GetInt32("UserId");
+
+            ViewBag.UserImagePath = user?.ImagePath ?? "~/images/download.png";
+            ViewBag.Username = user?.Username;
 
             var Categories = _context.Categories.ToList();
             var Users = _context.Users.ToList();
@@ -479,6 +647,12 @@ namespace First_PRO.Controllers
         }
         public async Task<IActionResult> EditProfile(decimal? id)
         {
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            var loginUser = _context.Users.Where(u => u.Id == (decimal)userId).FirstOrDefault();
+            ViewBag.userIdValue = HttpContext.Session.GetInt32("UserId");
+
+
             if (id == null || _context.Users == null)
             {
                 return NotFound();
@@ -534,7 +708,6 @@ namespace First_PRO.Controllers
 
                     _context.Update(userDb);
                     await _context.SaveChangesAsync();
-                    _context.Update(user);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -555,14 +728,64 @@ namespace First_PRO.Controllers
 
         public async Task<IActionResult> Guests()
         {
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            var loginUser = _context.Users.Where(u => u.Id == (decimal)userId).FirstOrDefault();
+            ViewBag.userIdValue = HttpContext.Session.GetInt32("UserId");
+
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+
+            ViewBag.UserImagePath = user?.ImagePath ?? "~/images/download.png";
+            ViewBag.Username = user?.Username;
+
             return _context.Guests != null ?
                         View(await _context.Guests.ToListAsync()) :
                         Problem("Entity set 'ModelContext.Guests'  is null.");
         }
-        public async Task<IActionResult> Reports()
+        public async Task<IActionResult> Reports(DateTime? startDate, DateTime? endDate)
         {
-            var modelContext = _context.Requests.Include(r => r.Recipe).Include(r => r.User);
-            return View(await modelContext.ToListAsync());
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+
+            var loginUser = _context.Users.Where(u => u.Id == (decimal)userId).FirstOrDefault();
+            ViewBag.userIdValue = HttpContext.Session.GetInt32("UserId");
+
+            ViewBag.UserImagePath = user?.ImagePath ?? "~/images/download.png";
+            ViewBag.Username = user?.Username;
+
+          
+
+
+
+
+
+            var result = _context.Requests.Include(x => x.Recipe).ToList();
+
+            if (startDate == null && endDate == null)
+            {
+                ViewBag.TotalPrice = result.Sum(x => x.Recipe?.Price);
+                return View(result);
+            }
+            else if (startDate != null && endDate == null)
+            {
+                result = result.Where(x => x.Date >= startDate).ToList();
+                ViewBag.TotalPrice = result.Sum(x => x.Recipe?.Price);
+                return View(result);
+            }
+            else if (startDate == null && endDate != null)
+            {
+                result = result.Where(x => x.Date <= endDate).ToList();
+                ViewBag.TotalPrice = result.Sum(x => x.Recipe?.Price);
+                return View(result);
+            }
+            else
+            {
+                result = result.Where(x => x.Date >= startDate && x.Date <= endDate).ToList();
+                ViewBag.TotalPrice = result.Sum(x => x.Recipe?.Price);
+                return View(result);
+            }
+
         }
 
     }

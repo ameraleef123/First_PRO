@@ -3,6 +3,10 @@
 @{
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_ChefLayout.cshtml";
+    ViewData["UserNumber"] = ViewBag.userIdValue;
+
+    ViewData["UserImage"] = ViewBag.UserImagePath;
+    ViewData["Username"] = ViewBag.Username;
 }
 
 <h1 class="m-3">Edit Recipe</h1>

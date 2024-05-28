@@ -4,6 +4,13 @@
 
 @{
     Layout = "~/views/shared/_Adminlayout.cshtml";
+    ViewData["UserNumber"] = ViewBag.userIdValue;
+
+    ViewData["UserImage"] = ViewBag.UserImagePath;
+    ViewData["Username"] = ViewBag.Username;
+
+
+
 }
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -118,16 +125,26 @@
     const doughnutChart = new Chart(doughnutCanvas, doughnutConfig);
 
     // Second chart configuration------------------------------------------------------------------------------------
-    var z = @Json.Serialize(@Model.Item4.Count())
+    var x = @Json.Serialize(@Model.Item4.Count());
+    var y = @Json.Serialize(@Model.Item4.Where(u => u.Date != null).Select(u => u.Date));
 
+    // Array of month names
+    const monthNames = [
+        'May', 'June',
+        'July', 'August', 'September', 'October'
+    ];
 
-    const barLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+    // Extract month names from each date
+    const barLabels = y.map(date => {
+        const monthNumber = new Date(date).getMonth();
+        return monthNames[monthNumber];
+    });
 
     const barData = {
-        labels: barLabels,
+        labels: monthNames,
         datasets: [{
             label: 'Number of Testimonials',
-            data: [z],
+            data: [x],
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(255, 159, 64, 0.2)',
@@ -165,6 +182,7 @@
     // Get the canvas element and create the second chart
     const barCanvas = document.getElementById('barChart1');
     const barChart = new Chart(barCanvas, barConfig);
+
 
     // Third chart configuration-------------------------------------------------------------------------
     const pieData = {

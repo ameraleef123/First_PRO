@@ -1,9 +1,9 @@
-﻿@model First_PRO.Models.User
+﻿@model List<First_PRO.Models.Recipe>
 
 @{
     Layout = "~/views/shared/_ASMPClayout.cshtml";
-    ViewData["UserImage"] = Model.ImagePath;
-    ViewData["Username"] = Model.Username;
+    ViewData["UserImage"] = ViewBag.UserImagePath;
+    ViewData["Username"] = ViewBag.Username;
 }
 
 <div class="container-xxl py-5 bg-dark hero-header mb-5">
@@ -11,13 +11,7 @@
         
             <h1 class="display-3 text-white mb-3 animated slideInDown"> Master Chef</h1>
             
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb justify-content-center text-uppercase">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Pages</a></li>
-                <li class="breadcrumb-item text-white active" aria-current="page">About</li>
-            </ol>
-        </nav>
+       
     </div>
 </div>
 <div class="container">
@@ -34,7 +28,6 @@
                             <h5 class="d-flex justify-content-between border-bottom pb-2">
                                 <span>@recipe.Name</span>
                             </h5>
-                            <p>@recipe.Description</p>
                             <p>Price: $@recipe.Price</p>
                         <p>Category: @recipe.Cat?.Name</p>
                         <!-- Additional chef information -->

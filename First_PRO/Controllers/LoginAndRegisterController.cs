@@ -14,32 +14,38 @@ namespace First_Project_MVC.Controllers
             {
                 _context = context;
             }
-        public IActionResult Register(User user, string userName, string password, Role role, string PhoneNumber, string Email, decimal Gender, string Address)
+
+        public IActionResult Register()
         {
-            var existingUser = _context.Users.FirstOrDefault(x => x.Username == userName);
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Register(User user)
+        {
+            var existingUser = _context.Users.FirstOrDefault(x => x.Username == user.Username);
             if (existingUser == null)
             {
-                if (ModelState.IsValid)
-                {
-                    var defaultProfilePicturePath = "~/Home/img/download.png";  
-
+                //if (ModelState.IsValid)
+                //{
                     var newUser = new User
                     {
-                        Username = userName,
-                        Password = password,
-                        RoleId = role.Id,
-                        PhoneNumber = PhoneNumber,
-                        Email = Email,
-                        Gender = Gender,
-                        Address = Address,
-                        ImagePath = defaultProfilePicturePath 
+                        Username = user.Username,
+                        Password = user.Password,
+                        RoleId = user.RoleId,
+                        PhoneNumber = user.PhoneNumber,
+                        Email = user.Email,
+                        Gender = user.Gender,
+                        Address = user.Address,
+                        ImagePath = "download.png",
+                        Date = DateTime.Now
                     };
 
                     _context.Users.Add(newUser);
                     _context.SaveChanges();
 
                     return RedirectToAction("Login");
-                }
+                //}
             }
             else
             {
@@ -66,6 +72,8 @@ namespace First_Project_MVC.Controllers
                 HttpContext.Session.SetInt32("UserId", (int)userLogin.Id);
                 HttpContext.Session.SetInt32("RoleId", (int)userLogin.RoleId);
                 HttpContext.Session.SetString("Username",userLogin.Username);
+                HttpContext.Session.SetString("Email", userLogin.Email);
+
                 ViewData["Message"] = "Hello from controller";
 
                 ViewBag.UserImage = userLogin.ImagePath;

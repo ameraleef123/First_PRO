@@ -1,8 +1,13 @@
 ﻿@model IEnumerable<First_PRO.Models.Recipe>
+@using Microsoft.AspNetCore.Html
 
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_ChefLayout.cshtml";
+    ViewData["UserNumber"] = ViewBag.userIdValue;
+
+    ViewData["UserImage"] = ViewBag.UserImagePath;
+    ViewData["Username"] = ViewBag.Username;
 }
 
 <h1> Recipes</h1>
@@ -50,7 +55,26 @@
                                         @Html.DisplayFor(modelItem => item.Price)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Description)
+                                        @{
+                                            IHtmlContent descriptionContent = Html.DisplayFor(modelItem => item.Description);
+                                            var writer = new System.IO.StringWriter();
+                                            descriptionContent.WriteTo(writer, System.Text.Encodings.Web.HtmlEncoder.Default);
+                                            string description = writer.ToString();
+
+                                            string[] words = System.Text.RegularExpressions.Regex.Split(description, @"\W+");
+                                            int wordsPerLine = 5;
+                                            int totalLines = (int)Math.Ceiling((double)words.Length / wordsPerLine);
+                                            string formattedDescription = "";
+
+                                            for (int i = 0; i < totalLines; i++)
+                                            {
+                                                int startIndex = i * wordsPerLine;
+                                                int endIndex = Math.Min(startIndex + wordsPerLine, words.Length);
+                                                string line = string.Join(" ", words, startIndex, endIndex - startIndex);
+                                                formattedDescription += line + "<br />";
+                                            }
+                                        }
+                                        @Html.Raw(formattedDescription)
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Date)

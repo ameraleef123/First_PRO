@@ -1,4 +1,5 @@
 ﻿using First_PRO.Models;
+using First_PRO.Services;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -99,7 +100,7 @@ namespace First_PRO.Controllers
             {
                 var averageRating = _context.Testimonials
                     .Where(t => t.RecipeId == recipe.Id)
-                    .Average(t => (double?)t.Rate) ?? 0; // Calculate average rating, default to 0 if no ratings
+                    .Average(t => (double?)t.Rate) ?? 0; 
                 recipe.AverageRating = averageRating;
             }
 
@@ -242,8 +243,10 @@ namespace First_PRO.Controllers
                 return View(testimonial);
             }
         }
-        public async Task<IActionResult> Requests()
+        public async Task<IActionResult> Requests(decimal? recipeId)
         {
+            ViewData["recipeIdValue"] = recipeId;
+
             return View();
         }
 
@@ -255,14 +258,17 @@ namespace First_PRO.Controllers
         public async Task<IActionResult> Requests([Bind("Id,RecipeId,Stuats,ByCard")] Request request)
         {
             var userId = HttpContext.Session.GetInt32("UserId");
-
             if (ModelState.IsValid)
             {
-                 
+                var recipe = _context.Recipes.FirstOrDefault(r => r.Id == request.RecipeId);
                 request.Date = DateTime.Now;
                 request.UserId = userId;
                 _context.Add(request);
                 await _context.SaveChangesAsync();
+
+                var toEmail = HttpContext.Session.GetString("Email");
+                EmailService.SendRecipeEmail(toEmail, recipe?.Name, recipe?.Description);
+
                 return RedirectToAction(nameof(User));
             }
             ViewData["RecipeId"] = new SelectList(_context.Recipes, "Id", "Id", request.RecipeId);
@@ -291,7 +297,7 @@ namespace First_PRO.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditProfile(decimal id, [Bind("Id,Username,PhoneNumber,Password,Email,Gender,Address,ImageFile")] User user)
+        public async Task<IActionResult> EditProfile(decimal id, [Bind("Id,PhoneNumber,Password,Email,Address,ImageFile")] User user)
         {
             if (id != user.Id)
             {
@@ -314,12 +320,10 @@ namespace First_PRO.Controllers
                 try
                 {
                     var userDb = await _context.Users.FindAsync(user.Id);
-                    userDb.Username = user.Username;
                     userDb.PhoneNumber = user.PhoneNumber;
                     userDb.Email = user.Email;
                     userDb.Password = user.Password;
                     userDb.Date = DateTime.Now;
-                    userDb.Gender = user.Gender;
                     userDb.Address = user.Address;
                     userDb.ImagePath = user.ImagePath;
                     _context.Update(userDb);

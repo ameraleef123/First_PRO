@@ -3,6 +3,10 @@
 @{
     ViewData["Title"] = "Delete";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["UserNumber"] = ViewBag.userIdValue;
+
+    ViewData["UserImage"] = ViewBag.UserImagePath;
+    ViewData["Username"] = Model.Username;
 }
 
 <h1 class="m-3">Delete User</h1>

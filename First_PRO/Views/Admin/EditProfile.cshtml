@@ -3,6 +3,10 @@
 @{
     ViewData["Title"] = "Edit Profile";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["UserNumber"] = ViewBag.userIdValue;
+
+    ViewData["UserImage"] = Model.ImagePath;
+    ViewData["Username"] = Model.Username;
 }
 
 <h1 class="m-3">Edit Profile</h1>
@@ -13,11 +17,7 @@
             <form asp-action="EditProfile" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="Id" />
-                <div class="form-group">
-                    <label asp-for="Username" class="control-label"></label>
-                    <input asp-for="Username" class="form-control" />
-                    <span asp-validation-for="Username" class="text-danger"></span>
-                </div>
+               
                 <div class="form-group">
                     <label asp-for="Password" class="control-label"></label>
                     <input asp-for="Password" class="form-control" />
@@ -45,7 +45,7 @@
                 </div>
                 <div class="form-group">
                     <input type="submit" value="Save" class="btn btn-outline-success" />
-                    <a asp-action="Index" class="btn btn-outline-danger">Cancel</a>
+                    <a href="https://localhost:7237/Admin/Index" class="btn btn-outline-danger">Cancel</a>
                 </div>
             </form>
         </div>

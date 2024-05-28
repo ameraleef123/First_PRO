@@ -2,7 +2,7 @@
 @{
     Layout = "~/views/shared/_Userlayout.cshtml";
     ViewData["Title"] = "Home Page";
-    ViewData["UserNumber"] = ViewBag.userIdValue;
+  
 
     ViewData["UserImage"] = Model.ImagePath;
     ViewData["Username"] = Model.Username;
@@ -208,6 +208,5 @@
                 </div>
             }
         </div>
-        <a asp-controller="Home" asp-action="TestimonialCreate" class="btn btn-primary me-2 py-2 px-4">Add Testimonial</a>
     </div>
 </div>

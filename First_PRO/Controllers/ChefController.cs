@@ -26,21 +26,42 @@ namespace First_Project_MVC.Controllers
 
         public IActionResult Index()
         {
-            var id = HttpContext.Session.GetInt32("UserId");
-            var userLogin = _context.Users.FirstOrDefault(x => x.Id == id);
+            var userId = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.FirstOrDefault(x => x.Id == userId);
+            var totalChefsCount = _context.Users.Count(u => u.RoleId == 2);
+            var totalUsersCount = _context.Users.Count(u => u.RoleId == 3);
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+
+            ViewBag.UserImagePath = user?.ImagePath ?? "~/images/download.png";
+            ViewBag.Username = user?.Username;
+            ViewBag.TotalChefsCount = totalChefsCount;
+            ViewBag.TotalUsersCount = totalUsersCount;
+
             return View(userLogin);
         }
 
         public async Task<IActionResult> Categories()
         {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+
+            ViewBag.UserImagePath = user?.ImagePath ?? "~/images/download.png";
+            ViewBag.Username = user?.Username;
+
+
             return _context.Categories != null ?
                         View(await _context.Categories.ToListAsync()) :
                         Problem("Entity set 'ModelContext.Categories'  is null.");
         }
        
 
-        public async Task<IActionResult> Chef()
+        public async Task<IActionResult> GetChef()
         {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+
+            ViewBag.UserImagePath = user?.ImagePath ?? "~/images/download.png";
+            ViewBag.Username = user?.Username;
             var modelContext = _context.Users
                                         .Include(u => u.Role)
                                         .Where(u => u.RoleId == 2); 
@@ -50,6 +71,10 @@ namespace First_Project_MVC.Controllers
         public async Task<IActionResult> Recipe()
         {
             var userId = HttpContext.Session.GetInt32("UserId");
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+
+            ViewBag.UserImagePath = user?.ImagePath ?? "~/images/download.png";
+            ViewBag.Username = user?.Username;
 
             IQueryable<Recipe> recipes = _context.Recipes.Where(r=>r.UserId == userId).Include(r => r.Cat).Include(r => r.User);
 
@@ -65,6 +90,15 @@ namespace First_Project_MVC.Controllers
         // GET: Recipes/Details/5
         public async Task<IActionResult> ChefDetails(decimal? id)
         {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            var user1 = _context.Users.FirstOrDefault(u => u.Id == userId);
+
+            ViewBag.UserImagePath = user1?.ImagePath ?? "~/images/download.png";
+            ViewBag.Username = user1?.Username;
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+
+            ViewBag.UserImagePath = user?.ImagePath ?? "~/images/download.png";
+            ViewBag.Username = user?.Username;
             if (id == null || _context.Recipes == null)
             {
                 return NotFound();
@@ -85,6 +119,11 @@ namespace First_Project_MVC.Controllers
         // GET: Recipes/Create
         public IActionResult ChefCreate()
         {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            var user1 = _context.Users.FirstOrDefault(u => u.Id == userId);
+
+            ViewBag.UserImagePath = user1?.ImagePath ?? "~/images/download.png";
+            ViewBag.Username = user1?.Username;
             ViewData["CatId"] = new SelectList(_context.Categories, "Id", "Name");
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
@@ -140,6 +179,13 @@ namespace First_Project_MVC.Controllers
         // GET: Recipes/Edit/5
         public async Task<IActionResult> ChefEdit(decimal? id)
         {
+
+            var userId = HttpContext.Session.GetInt32("UserId");
+            var user1 = _context.Users.FirstOrDefault(u => u.Id == userId);
+
+            ViewBag.UserImagePath = user1?.ImagePath ?? "~/images/download.png";
+            ViewBag.Username = user1?.Username;
+
             if (id == null || _context.Recipes == null)
             {
                 return NotFound();
@@ -217,6 +263,11 @@ namespace First_Project_MVC.Controllers
         // GET: Recipes/Delete/5
         public async Task<IActionResult> ChefDelete(decimal? id)
         {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            var user1 = _context.Users.FirstOrDefault(u => u.Id == userId);
+
+            ViewBag.UserImagePath = user1?.ImagePath ?? "~/images/download.png";
+            ViewBag.Username = user1?.Username;
             if (id == null || _context.Recipes == null)
             {
                 return NotFound();
@@ -259,6 +310,11 @@ namespace First_Project_MVC.Controllers
         }
         public async Task<IActionResult> GetRecipes(int chefId)
         {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            var user1 = _context.Users.FirstOrDefault(u => u.Id == userId);
+
+            ViewBag.UserImagePath = user1?.ImagePath ?? "~/images/download.png";
+            ViewBag.Username = user1?.Username;
             // Retrieve recipes associated with the specified chef ID
             var recipes = await _context.Recipes
                                         .Where(r => r.UserId == chefId)
