@@ -64,13 +64,17 @@ namespace First_Project_MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(User user)
         {
-            var userLogin = await _context.Users.
-                Where(x => x.Username == user.Username && x.Password == user.Password).SingleOrDefaultAsync();
+            //if(string.IsNullOrEmpty( user.Username) || string.IsNullOrEmpty(user.Password))
+            //{
+            //    return View();
+            //}
+            var userLogin = _context.Users.
+                Where(x => x.Username == user.Username && x.Password == user.Password).FirstOrDefault();
 
             if (userLogin != null)
             {
                 HttpContext.Session.SetInt32("UserId", (int)userLogin.Id);
-                HttpContext.Session.SetInt32("RoleId", (int)userLogin.RoleId);
+                HttpContext.Session.SetInt32("RoleId", (int)userLogin?.RoleId);
                 HttpContext.Session.SetString("Username",userLogin.Username);
                 HttpContext.Session.SetString("Email", userLogin.Email);
 
